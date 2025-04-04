@@ -12,6 +12,9 @@ import math
 import threading
 import time
 
+Debug = input("Do you want to enter Debug Mode? [Y/N] \n")
+if Debug == "Y":
+    print("Entering Debug Mode")
 #4 verschillende try excepts voor de zekerheid
 try:
     Range = int(input("How big do you want your field? (Recommended 25) \n"))
@@ -83,10 +86,12 @@ def addEdgesToClosest():
 
         if closestNode is not None:
             G.add_edge(node, closestNode)
-            #Veel formatting gebruikt van w3schools voor de leesbaarheid, specefiek de :<3, wat bijna functioneert als tab in de print
-            #https://www.w3schools.com/python/python_string_formatting.asp
-            print(f"Added edge between node {node:<3} and node {closestNode:<3} with a distance of about {round(distance(pos[node], pos[closestNode]), 2)}")
-
+            if Debug == "Y":
+                #Veel formatting gebruikt van w3schools voor de leesbaarheid, specefiek de :<3, wat bijna functioneert als tab in de print
+                #https://www.w3schools.com/python/python_string_formatting.asp
+                print(f"Added edge between node {node:<3} and node {closestNode:<3} with a distance of about {round(distance(pos[node], pos[closestNode]), 2)}")
+            else:
+                continue
 
 #Voert de verbindingsproces uit een hoeveelheid keer gelijk aan de 'connectivity' waarde
 for i in range(Connectivity):
@@ -102,13 +107,13 @@ try:
     StartNode = int(input("What node do you want to be your Starting Point? \n"))
 except:
     StartNode = 1
-    print(f"Error, Destination Node set to {StartNode}")
+    print(f"Error: Destination Node set to {StartNode}")
 
 try:
     DestNode = int(input("What node do you want to be your Destination \n"))
 except:
-    DestNode = Frequency
-    print(f"Error, Destination Node set to {DestNode}")
+    DestNode = random.randint(2, Frequency)
+    print(f"Error: Destination Node set to {DestNode}")
 
 # Kijkt naar de Dictionary van edges (automatisch gecreert door matplotlib), en verandert de 'weight' variabel in de afstand tussen de twee nodes
 for InNode, OutNode in G.edges():
@@ -157,11 +162,14 @@ def FindRoute(graph, start, goal):
                 edgeWeight = graph[current][neighbor].get('weight')
                 #Voegt de nieuwe frontier toe, update de Total Distance, Huidige Node, En voegt de huidige node toe aan de path
                 frontiers.append((distSoFar + edgeWeight, neighbor, path + [neighbor]))
-                print(frontiers)
+                if Debug == "Y":
+                    print(frontiers)
+                else:
+                    continue
 
 try:
     path, TotalDistanceQuickestRoute = FindRoute(G, StartNode, DestNode)
-    print(f"Path from node {StartNode} to node {DestNode}: {path} with total distance {round(TotalDistanceQuickestRoute, 2)}")
+    print(f"\n\nPath from node {StartNode} to node {DestNode}: {path} with total distance {round(TotalDistanceQuickestRoute, 2)}")
     # Zipped twee lijsten, eentje van 'path' en eentje van 'path[1:]' (Path maar dan met alle waardes 1 index plek opgeschoven zodat de zip zowel de begin als eindwaarde van de node in een tuple zet)
     # https://www.w3schools.com/python/ref_func_zip.asp
     # https://www.w3schools.com/python/python_lists_access.asp
@@ -176,7 +184,7 @@ try:
     #Chatgpt gebruikt voor deze lijn, dit zorgt erboor dat alleen de nodes in de path een Label krijgen.
     nodeLabels = {node: node for node in path}
     nx.draw(G, pos, with_labels=True, node_color=node_colors, node_size=nodeSizes, font_color='black', font_size=7, edge_color=edge_colors, width=edge_widths, labels=nodeLabels)
-
     plt.show()
+    
 except:
-    print(f"No available path from node {StartNode} to node {DestNode}")
+    print(f"\n\nNo available path from node {StartNode} to node {DestNode}")
