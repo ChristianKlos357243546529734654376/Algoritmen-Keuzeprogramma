@@ -2,6 +2,7 @@
 PTA2 onderdeel van Christian
 
 PROJECTPLAN
+
 De Keuzedomein Algoritmiek had op eerste blik niet heel veel diepte, er was in fundament niet veel informatie. Maar hoe meer ik erover kwam te leren, hoe duidelijker de term werd uitgelijnd. 
 In het kort zijn algoritmen processen die een bepaald stappenplan volgen om vanuit een probleem een oplossing te bedenken.
 
