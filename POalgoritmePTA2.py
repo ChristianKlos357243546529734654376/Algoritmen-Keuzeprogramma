@@ -15,15 +15,18 @@ import time
 Debug = input("Do you want to enter Debug Mode? [Y/N] \n")
 if Debug == "Y":
     print("Entering Debug Mode")
+else:
+    print("For best user experience use recommended values.")
+
 #4 verschillende try excepts voor de zekerheid
 try:
-    Range = int(input("How big do you want your field? (Recommended 25) \n"))
+    Range = int(input("How big do you want your field? (Recommended 25 t/m 100) \n"))
 except:
     Range = 25
     print(f"Error: Max length between edges set to {Range} \n")
 
 try:
-    Frequency = int(input("How many nodes do you want in your field? (Recommended 10) \n"))
+    Frequency = int(input("How many nodes do you want in your field? (Recommended 10 t/m 50) \n"))
 except:
     Frequency = 10
     print(f"Error: Max length between edges set to {Frequency} \n")
@@ -102,7 +105,7 @@ for i in range(Connectivity):
 nx.draw(G, pos, with_labels=True, node_color='white', edge_color='gray', node_size=100, font_color='black', font_size=7)
 #Threading werkt niet samen met matplotlib, dus moet het helaas maar zo
 #MatPlotLib geeft foutmelding dat plt.show niet functioneert als het niet op een main thread is
-print("\n \n CLOSE THE PLOT WHEN READY TO CALCULATE")
+print("\n \n CLOSE THE PLOT WHEN READY TO CALCULATE (Remember the numbers you want to calculate)")
 plt.show()
 
 try:
@@ -112,7 +115,7 @@ except:
     print(f"Error: Destination Node set to {StartNode}")
 
 try:
-    DestNode = int(input("What node do you want to be your Destination \n"))
+    DestNode = int(input("What node do you want to be your Destination? \n"))
 except:
     DestNode = random.randint(2, Frequency)
     print(f"Error: Destination Node set to {DestNode}")
