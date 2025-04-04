@@ -55,6 +55,7 @@ G = nx.Graph()
 G.add_nodes_from(['NW', 'NE', 'SE', 'SW'] + list(nodes))
 
 #Creëert een dictionary van 4 Coördinaten gelijk aan de range +5 (zodat ze net buiten de range zitten), deze waardes zorgen ervoor dat de view window consistent is en altijd alle nodes bevat, verder onbelangrijk.
+#https://www.w3schools.com/python/python_dictionaries.asp
 pos = {
     'NW': (-(Range+5), (Range+5)),
     'NE': ((Range+5), (Range+5)),
@@ -93,13 +94,14 @@ def addEdgesToClosest():
             else:
                 continue
 
-#Voert de verbindingsproces uit een hoeveelheid keer gelijk aan de 'connectivity' waarde
+#Voert het verbindingsproces uit een hoeveelheid keer gelijk aan de 'connectivity' waarde
 for i in range(Connectivity):
     addEdgesToClosest()
 
 
 nx.draw(G, pos, with_labels=True, node_color='white', edge_color='gray', node_size=100, font_color='black', font_size=7)
 #Threading werkt niet samen met matplotlib, dus moet het helaas maar zo
+#MatPlotLib geeft foutmelding dat plt.show niet functioneert als het niet op een main thread is
 print("\n \n CLOSE THE PLOT WHEN READY TO CALCULATE")
 plt.show()
 
@@ -143,7 +145,7 @@ def FindRoute(graph, start, goal):
         #Sorteert bij de kortste 'distance', zodat ieder afstand met gelijke snelheid wordt gemeten.
         #https://www.w3schools.com/python/python_tuples.asp
         frontiers.sort(key=getDistance)
-        #verwijderd de frontier die de code gaat uitbreiden, maar neemt eerst de waardes voor de calculatie.
+        #verwijdert de frontier die de code gaat uitbreiden, maar neemt eerst de waardes voor de calculatie.
         distSoFar, current, path = frontiers.pop(0)
 
         if current == goal:
@@ -156,7 +158,7 @@ def FindRoute(graph, start, goal):
         #voegt de huidige node toe aan visited, zodat we nooit twee keer langs dezelfde node gaan
         visited.append(current)
         
-        #Deze for loop kijkt naar alle 'neighbours' (alle nodes die verbonden zijn met een edge), berekent de afstand om ernaar te gaan, en voegt die frontier too aan frontiers
+        #Deze for loop kijkt naar alle 'neighbours' (alle nodes die verbonden zijn met deze node met een edge), berekent de afstand om ernaar te gaan, en voegt die frontier too aan frontiers
         for neighbor in graph.neighbors(current):
             if neighbor not in visited:
                 edgeWeight = graph[current][neighbor].get('weight')
@@ -173,11 +175,11 @@ try:
     # Zipped twee lijsten, eentje van 'path' en eentje van 'path[1:]' (Path maar dan met alle waardes 1 index plek opgeschoven zodat de zip zowel de begin als eindwaarde van de node in een tuple zet)
     # https://www.w3schools.com/python/ref_func_zip.asp
     # https://www.w3schools.com/python/python_lists_access.asp
-    # Veranderd de kleuren en dikte van de edges als ze in de path zijn.
+    # Verandert de kleuren en dikte van de edges als ze in de path zijn.
     edge_colors = ['red' if (Node1, Node2) in zip(path, path[1:]) or (Node2, Node1) in zip(path, path[1:]) else 'gray' for Node1, Node2 in G.edges()]
     edge_widths = [ 2 if (Node1, Node2) in zip(path, path[1:]) or (Node2, Node1) in zip(path, path[1:]) else 1 for Node1, Node2 in G.edges()]
 
-    # Veranderd de kleuren van de nodes zelf als ze in de path zijn.
+    # Verandert de kleuren van de nodes zelf als ze in de path zijn.
     node_colors = ['red' if node in path else 'white' for node in G.nodes()]
     nodeSizes = [75 if node in path else 0 for node in G.nodes()]
 
